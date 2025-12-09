@@ -3,130 +3,193 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MiniGAMES by Ula</title>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data:; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; connect-src 'self' https:;">
-    <!-- Fonts arrodonides com a la imatge -->
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <title>ARCADE VERSE - 8-BIT EDITION</title>
+    <!-- Fonts Retro i Futuristes -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
     <!-- Icones -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
-            --primary: #4f46e5;
-            --accent-purple: #8b5cf6;
-            --accent-pink: #ec4899;
-            --accent-cyan: #06b6d4;
-            --bg-body: #f8fafc;
-            --bg-card: #ffffff;
-            --text-main: #1e293b;
-            --text-muted: #64748b;
-            --radius-xl: 24px;
-            --radius-lg: 16px;
-            --shadow-soft: 0 10px 40px -10px rgba(0,0,0,0.08);
-            --shadow-hover: 0 20px 40px -5px rgba(0,0,0,0.15);
+            /* Paleta Retro Arcade / Synthwave */
+            --bg-body: #050510;
+            --bg-panel: #111122;
+            --neon-blue: #00f3ff;
+            --neon-pink: #ff00ff;
+            --neon-green: #00ff41;
+            --neon-yellow: #fcee0a;
+            --text-main: #e0e0e0;
+            --text-dim: #8888aa;
+            
+            /* Efectes */
+            --glow-blue: 0 0 10px var(--neon-blue), 0 0 20px var(--neon-blue);
+            --glow-pink: 0 0 10px var(--neon-pink), 0 0 20px var(--neon-pink);
+            --crt-scanline: rgba(18, 16, 16, 0.1);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Nunito', sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             background-color: var(--bg-body);
             color: var(--text-main);
+            font-family: 'Orbitron', sans-serif; /* Més llegible per cos de text */
             min-height: 100vh;
             overflow-x: hidden;
+            position: relative;
         }
+
+        /* --- CRT OVERLAY EFFECT --- */
+        body::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 9998;
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+        }
+        
+        /* Vignette effect */
+        body::after {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: radial-gradient(circle, rgba(0,0,0,0) 60%, rgba(0,0,0,0.6) 100%);
+            z-index: 9998;
+            pointer-events: none;
+        }
+
+        /* Scrollbar personalitzat */
+        ::-webkit-scrollbar { width: 10px; background: #000; }
+        ::-webkit-scrollbar-thumb { background: var(--neon-pink); border-radius: 0; border: 2px solid #000; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--neon-blue); }
 
         /* --- HEADER --- */
         .navbar {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
+            background: rgba(10, 10, 20, 0.95);
+            border-bottom: 2px solid var(--neon-blue);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 1000; /* Per sobre de CRT */
             padding: 15px 30px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.03);
         }
 
         .logo {
-            font-size: 1.5rem;
-            font-weight: 800;
-            background: linear-gradient(90deg, #4f46e5, #ec4899);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 1.2rem;
+            color: var(--neon-yellow);
+            text-shadow: 4px 4px 0px #ff00de;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
+            animation: glitch 3s infinite;
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            2% { transform: translate(-2px, 2px); }
+            4% { transform: translate(2px, -2px); }
+            6% { transform: translate(0); }
+            100% { transform: translate(0); }
         }
 
         .search-bar-container {
             flex: 1;
             max-width: 500px;
-            margin: 0 20px;
+            margin: 0 30px;
             position: relative;
         }
 
         .search-input {
             width: 100%;
-            padding: 12px 20px 12px 45px;
-            border-radius: 50px;
-            border: 2px solid #e2e8f0;
-            background: #f1f5f9;
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: var(--text-main);
+            padding: 12px 20px 12px 50px;
+            border-radius: 4px; /* Cantons més quadrats */
+            border: 2px solid var(--text-dim);
+            background: #000;
+            font-family: 'VT323', monospace;
+            font-size: 1.5rem; /* Font pixelada gran */
+            color: var(--neon-green);
             transition: all 0.3s ease;
             outline: none;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
 
         .search-input:focus {
-            background: white;
-            border-color: var(--accent-cyan);
-            box-shadow: 0 0 0 4px rgba(6, 182, 212, 0.1);
+            border-color: var(--neon-green);
+            box-shadow: 0 0 10px var(--neon-green);
         }
+        
+        .search-input::placeholder { color: #335533; }
 
         .search-icon {
             position: absolute;
-            left: 18px;
+            left: 15px;
             top: 50%;
             transform: translateY(-50%);
-            color: var(--text-muted);
+            color: var(--neon-green);
+            font-size: 1.2rem;
         }
 
         .nav-actions {
             display: flex;
-            gap: 15px;
+            gap: 20px;
             align-items: center;
         }
 
         .icon-btn {
-            width: 40px; height: 40px;
-            border-radius: 50%;
-            border: none;
-            background: white;
+            width: 45px; height: 45px;
+            border: 2px solid var(--neon-pink);
+            background: #000;
             cursor: pointer;
-            color: var(--text-muted);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            transition: 0.2s;
+            color: var(--neon-pink);
+            box-shadow: 2px 2px 0px var(--neon-pink);
+            transition: 0.1s;
             display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem;
+            position: relative;
+            overflow: hidden;
         }
-        .icon-btn:hover { background: #f1f5f9; color: var(--primary); }
-        .profile-pic { width: 40px; height: 40px; border-radius: 50%; background: #ddd; overflow: hidden; }
+        .icon-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: none;
+        }
+        .icon-btn:hover {
+            background: var(--neon-pink);
+            color: #000;
+        }
+
+        .profile-pic { 
+            width: 45px; height: 45px; 
+            border: 2px solid var(--neon-yellow);
+            background: #000;
+            image-rendering: pixelated;
+        }
         .profile-pic img { width: 100%; height: 100%; object-fit: cover; }
 
         /* --- MAIN CONTENT --- */
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 30px 20px;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 10;
         }
 
-        /* --- HERO BANNER (Estil imatge) --- */
+        /* --- HERO BANNER --- */
         .hero-banner {
             width: 100%;
-            border-radius: var(--radius-xl);
-            background: linear-gradient(135deg, #240b36 0%, #7c2d12 0%, #4c1d95 20%, #2563eb 100%);
+            border: 4px solid var(--neon-blue);
+            background: 
+                linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,0,0,0.2)),
+                repeating-linear-gradient(0deg, transparent, transparent 19px, rgba(0, 243, 255, 0.1) 20px),
+                linear-gradient(135deg, #240b36 0%, #1a1a2e 100%);
             padding: 60px 40px;
             position: relative;
             overflow: hidden;
@@ -134,160 +197,186 @@
             flex-direction: column;
             justify-content: center;
             align-items: flex-start;
-            color: white;
-            margin-bottom: 40px;
-            box-shadow: 0 20px 50px -10px rgba(76, 29, 149, 0.4);
+            margin-bottom: 50px;
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.2), inset 0 0 50px rgba(0,0,0,0.8);
         }
 
-        /* Elements decoratius del fons */
-        .hero-bg-glow {
+        /* Elements decoratius (GRID) */
+        .hero-banner::after {
+            content: '';
             position: absolute;
-            width: 600px; height: 600px;
-            background: radial-gradient(circle, rgba(236, 72, 153, 0.4) 0%, rgba(0,0,0,0) 70%);
-            top: -200px; right: -100px;
-            pointer-events: none;
-        }
-        .hero-bg-glow-2 {
-            position: absolute;
-            width: 400px; height: 400px;
-            background: radial-gradient(circle, rgba(6, 182, 212, 0.4) 0%, rgba(0,0,0,0) 70%);
-            bottom: -100px; left: 0;
+            bottom: 0; left: 0; width: 100%; height: 50%;
+            background: 
+                linear-gradient(90deg, rgba(255,0,255,0.3) 1px, transparent 1px),
+                linear-gradient(0deg, rgba(255,0,255,0.3) 1px, transparent 1px);
+            background-size: 40px 40px;
+            perspective: 500px;
+            transform: perspective(300px) rotateX(60deg) translateY(50px) scale(2);
+            opacity: 0.3;
             pointer-events: none;
         }
 
         .hero-title {
-            font-size: 3rem;
-            font-weight: 900;
-            line-height: 1.1;
-            margin-bottom: 15px;
-            text-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            z-index: 1;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 2.5rem;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            color: #fff;
+            text-shadow: 4px 4px 0px var(--neon-blue);
+            z-index: 2;
         }
         
         .hero-subtitle {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            margin-bottom: 30px;
-            font-weight: 600;
-            z-index: 1;
+            font-family: 'VT323', monospace;
+            font-size: 2rem;
+            color: var(--neon-green);
+            margin-bottom: 40px;
+            z-index: 2;
+            background: rgba(0,0,0,0.6);
+            padding: 5px 10px;
         }
 
         .btn-play {
-            padding: 12px 30px;
-            background: white;
-            color: var(--primary);
-            font-weight: 800;
-            border-radius: 50px;
+            padding: 15px 35px;
+            background: var(--neon-yellow);
+            color: #000;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.9rem;
             text-decoration: none;
-            box-shadow: 0 5px 20px rgba(255,255,255,0.3);
-            transition: transform 0.2s;
-            z-index: 1;
             border: none;
             cursor: pointer;
+            box-shadow: 6px 6px 0px #b8860b;
+            transition: all 0.1s;
+            z-index: 2;
+            position: relative;
+            overflow: hidden;
         }
-        .btn-play:hover { transform: scale(1.05); }
+        .btn-play:active {
+            transform: translate(4px, 4px);
+            box-shadow: 2px 2px 0px #b8860b;
+        }
+        .btn-play:hover {
+            background: #fff;
+            color: #000;
+            animation: pulse-yellow 1s infinite;
+        }
+
+        @keyframes pulse-yellow {
+            0% { box-shadow: 6px 6px 0px #b8860b, 0 0 10px var(--neon-yellow); }
+            50% { box-shadow: 6px 6px 0px #b8860b, 0 0 25px var(--neon-yellow); }
+            100% { box-shadow: 6px 6px 0px #b8860b, 0 0 10px var(--neon-yellow); }
+        }
 
         /* --- CATEGORY PILLS --- */
         .categories-wrapper {
             display: flex;
             gap: 15px;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
             overflow-x: auto;
-            padding-bottom: 10px;
-            scrollbar-width: none;
+            padding: 10px 5px;
         }
-        .categories-wrapper::-webkit-scrollbar { display: none; }
+        .categories-wrapper::-webkit-scrollbar { height: 5px; }
 
         .cat-pill {
-            padding: 10px 24px;
-            border-radius: 50px;
-            background: white;
+            padding: 12px 20px;
+            border: 2px solid var(--text-dim);
+            background: #000;
+            font-family: 'Orbitron', sans-serif;
             font-weight: 700;
-            color: var(--text-muted);
+            color: var(--text-dim);
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 8px;
-            transition: all 0.3s;
+            gap: 10px;
+            transition: all 0.2s;
             white-space: nowrap;
-            border: 2px solid transparent;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+            text-transform: uppercase;
+            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
         }
 
-        .cat-pill i { font-size: 1.1em; }
-
-        .cat-pill:hover { transform: translateY(-2px); color: var(--text-main); }
-        
-        /* Estils específics per categoria activa/color */
-        .cat-pill.active, .cat-pill:active {
-            color: white;
-            box-shadow: 0 8px 20px -5px rgba(0,0,0,0.2);
+        .cat-pill:hover {
+            border-color: var(--neon-blue);
+            color: var(--neon-blue);
+            box-shadow: 0 0 10px var(--neon-blue);
         }
         
-        /* Colors personalitzats per botons */
-        .cat-arcade.active { background: linear-gradient(135deg, #3b82f6, #2563eb); }
-        .cat-puzzle.active { background: linear-gradient(135deg, #a855f7, #9333ea); }
-        .cat-racing.active { background: linear-gradient(135deg, #ec4899, #db2777); }
-        .cat-adventure.active { background: linear-gradient(135deg, #06b6d4, #0891b2); }
-        .cat-multi.active { background: linear-gradient(135deg, #84cc16, #65a30d); }
+        .cat-pill.active {
+            background: var(--neon-pink);
+            color: #000;
+            border-color: var(--neon-pink);
+            box-shadow: 0 0 15px var(--neon-pink);
+        }
 
         /* --- GAME GRID --- */
         .game-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 30px;
         }
 
         .game-card {
-            background: var(--bg-card);
-            border-radius: var(--radius-xl);
-            overflow: hidden;
-            box-shadow: var(--shadow-soft);
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            background: #000;
+            border: 2px solid #333;
             position: relative;
             cursor: pointer;
-            border: 1px solid rgba(0,0,0,0.02);
+            transition: all 0.3s;
             display: flex;
             flex-direction: column;
+            image-rendering: pixelated; /* Píxels nítids */
+        }
+
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px;
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-pink));
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s;
         }
 
         .game-card:hover {
-            transform: translateY(-8px);
-            box-shadow: var(--shadow-hover);
+            transform: translateY(-5px) scale(1.02);
+            border-color: transparent;
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
         }
+        .game-card:hover::before { opacity: 1; }
 
         .card-image-container {
             width: 100%;
-            aspect-ratio: 16/10; /* Una mica rectangular com la imatge */
+            aspect-ratio: 4/3; /* Format CRT clàssic */
             position: relative;
             overflow: hidden;
+            border-bottom: 2px solid #333;
         }
 
         .card-img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.5s;
+            transition: transform 0.2s;
+            filter: grayscale(40%) contrast(120%);
         }
-        .game-card:hover .card-img { transform: scale(1.1); }
+        .game-card:hover .card-img { 
+            transform: scale(1.1); 
+            filter: grayscale(0%) contrast(100%);
+        }
 
-        /* Badge "New" or "Hot" */
+        /* Badges estil Pixel */
         .card-badge {
             position: absolute;
-            top: 12px; left: 12px;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(4px);
-            color: white;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 4px;
+            top: 10px; left: 10px;
+            background: #000;
+            border: 2px solid;
+            color: #fff;
+            padding: 5px 8px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.5rem;
+            text-transform: uppercase;
+            box-shadow: 2px 2px 0px rgba(0,0,0,0.5);
         }
-        .badge-new { background: #3b82f6; }
-        .badge-hot { background: #f59e0b; }
+        .badge-new { border-color: var(--neon-blue); color: var(--neon-blue); }
+        .badge-hot { border-color: var(--neon-pink); color: var(--neon-pink); }
 
         .card-content {
             padding: 15px;
@@ -295,64 +384,83 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            background: #111;
         }
 
         .game-title {
-            font-weight: 800;
-            font-size: 1rem;
-            margin-bottom: 5px;
-            color: var(--text-main);
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #fff;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            white-space: nowrap;
             overflow: hidden;
-            line-height: 1.3;
+            text-overflow: ellipsis;
         }
 
         .play-btn-overlay {
-            margin-top: 10px;
             width: 100%;
             padding: 8px;
-            background: #f1f5f9;
-            color: var(--primary);
+            background: transparent;
+            color: var(--neon-green);
             text-align: center;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 0.9rem;
+            border: 2px solid var(--neon-green);
+            font-family: 'VT323', monospace;
+            font-size: 1.2rem;
+            text-transform: uppercase;
             transition: 0.2s;
         }
+        
         .game-card:hover .play-btn-overlay {
-            background: var(--primary);
-            color: white;
+            background: var(--neon-green);
+            color: #000;
+            box-shadow: 0 0 10px var(--neon-green);
+            animation: blink 0.5s step-end infinite alternate;
         }
+        @keyframes blink { 50% { opacity: 0.7; } }
 
-        /* --- LOADING SCREEN --- */
+        /* --- LOADING SCREEN (Retro Boot) --- */
         #loadingScreen {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: #f8fafc;
-            z-index: 9999;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            background: #000;
+            z-index: 10000;
+            display: flex; 
+            flex-direction: column; 
+            align-items: flex-start; 
+            justify-content: flex-start;
+            padding: 50px;
+            color: var(--neon-green);
+            font-family: 'VT323', monospace;
+            font-size: 1.5rem;
             transition: opacity 0.5s;
         }
         #loadingScreen.hidden { opacity: 0; pointer-events: none; }
         
-        .loader-spinner {
-            width: 50px; height: 50px;
-            border: 5px solid #e2e8f0;
-            border-top-color: var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
+        .loading-text { margin-bottom: 10px; }
+        .cursor { display: inline-block; width: 10px; height: 20px; background: var(--neon-green); animation: blink 1s infinite; }
+        
+        .loading-bar-container {
+            margin-top: 20px;
+            width: 300px;
+            height: 20px;
+            border: 2px solid var(--neon-green);
+            padding: 2px;
         }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
+        .loading-bar {
+            height: 100%;
+            background: var(--neon-green);
+            width: 0%;
+            transition: width 0.2s;
+        }
 
         /* --- MODAL --- */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(5px);
+            background: rgba(0, 0, 0, 0.9);
             z-index: 2000;
             display: none;
             justify-content: center;
@@ -364,68 +472,88 @@
         
         .game-window {
             width: 90%; height: 85%; max-width: 1200px;
-            background: white;
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+            background: #111;
+            border: 4px solid #333;
+            box-shadow: 0 0 50px rgba(0, 243, 255, 0.2);
             display: flex; flex-direction: column;
+            position: relative;
+        }
+        /* Decoració monitor */
+        .game-window::after {
+            content: "ARCADE SYSTEM";
+            position: absolute;
+            bottom: -30px; left: 50%; transform: translateX(-50%);
+            color: #555; font-family: 'Press Start 2P'; font-size: 0.8rem;
         }
         
         .window-header {
             padding: 10px 20px;
-            background: white;
-            border-bottom: 1px solid #e2e8f0;
+            background: #222;
+            border-bottom: 2px solid #444;
             display: flex; justify-content: space-between; align-items: center;
         }
-        .btn-control {
-            background: #f1f5f9; border: none; width: 32px; height: 32px;
-            border-radius: 50%; cursor: pointer; color: var(--text-main);
-            transition: 0.2s;
+        
+        #windowTitle {
+            font-family: 'Press Start 2P'; font-size: 0.8rem; color: var(--neon-yellow);
         }
-        .btn-control:hover { background: #e2e8f0; }
-        .btn-close:hover { background: #ef4444; color: white; }
+
+        .btn-control {
+            background: #333; border: 2px solid #555; width: 32px; height: 32px;
+            cursor: pointer; color: #fff;
+            transition: 0.2s;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .btn-control:hover { border-color: var(--neon-blue); color: var(--neon-blue); }
+        .btn-close:hover { border-color: var(--neon-pink); color: var(--neon-pink); }
         
         iframe { border: none; width: 100%; flex: 1; background: #000; }
 
         /* Responsive */
         @media (max-width: 768px) {
-            .navbar { padding: 10px 15px; flex-wrap: wrap; }
-            .search-bar-container { order: 3; min-width: 100%; margin: 10px 0 0 0; }
-            .hero-title { font-size: 2rem; }
+            .navbar { flex-wrap: wrap; padding: 10px; }
+            .search-bar-container { order: 3; min-width: 100%; margin: 15px 0 0 0; }
+            .hero-title { font-size: 1.5rem; }
             .game-grid { grid-template-columns: repeat(2, 1fr); }
+            .logo { font-size: 0.9rem; }
         }
         @media (max-width: 480px) {
             .game-grid { grid-template-columns: 1fr; }
+            .hero-banner { padding: 30px 20px; }
+            .cat-pill { padding: 8px 12px; font-size: 0.8rem; }
         }
     </style>
 </head>
 <body>
 
-    <!-- PANTALLA DE CÀRREGA -->
+    <!-- PANTALLA DE CÀRREGA RETRO -->
     <div id="loadingScreen">
-        <div class="loader-spinner"></div>
-        <h2 style="font-weight: 800; color: var(--text-main);">Carregant MiniGAMES...</h2>
-        <p id="percentageDisplay" style="color: var(--text-muted); margin-top: 5px;">0%</p>
+        <div class="loading-text">> INITIALIZING SYSTEM...</div>
+        <div class="loading-text">> LOADING ASSETS... <span id="textPercent">0%</span></div>
+        <div class="loading-text">> MOUNTING DRIVES... OK</div>
+        <div class="loading-bar-container">
+            <div class="loading-bar" id="progressBar"></div>
+        </div>
+        <div style="margin-top: 20px;">> READY <span class="cursor"></span></div>
     </div>
 
     <!-- HEADER -->
     <nav class="navbar">
         <div class="logo">
-            <i class="fa-solid fa-gamepad"></i>
-            ArcadeVerse
+            <i class="fa-solid fa-gamepad" style="color: var(--neon-pink);"></i>
+            ARCADE<span style="color:var(--neon-blue)">VERSE</span>
         </div>
         
         <div class="search-bar-container">
-            <i class="fa-solid fa-search search-icon"></i>
-            <input type="text" id="searchInput" class="search-input" placeholder="Search games...">
+            <i class="fa-solid fa-terminal search-icon"></i>
+            <input type="text" id="searchInput" class="search-input" placeholder="INSERT GAME NAME...">
         </div>
 
         <div class="nav-actions">
-            <button class="icon-btn"><i class="fa-regular fa-bell"></i></button>
-            <button class="icon-btn"><i class="fa-solid fa-coins" style="color: #fbbf24;"></i></button>
+            <button class="icon-btn"><i class="fa-solid fa-trophy"></i></button>
+            <button class="icon-btn"><i class="fa-solid fa-coins"></i></button>
             <div class="profile-pic">
                 <!-- Avatar genèric -->
-                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="User">
+                <img src="https://api.dicebear.com/7.x/pixel-art/svg?seed=Felix" alt="User">
             </div>
         </div>
     </nav>
@@ -435,33 +563,30 @@
         
         <!-- HERO BANNER -->
         <div class="hero-banner">
-            <div class="hero-bg-glow"></div>
-            <div class="hero-bg-glow-2"></div>
-            
-            <h1 class="hero-title">PLAY INSTANTLY —<br>1000+ MINI GAMES</h1>
-            <p class="hero-subtitle">Salta a la diversió sense fi sense descàrregues!</p>
-            <button class="btn-play" onclick="scrollToGrid()">EXPLORE NOW <i class="fa-solid fa-arrow-right"></i></button>
+            <h1 class="hero-title">INSERT COIN TO<br>START PLAYING</h1>
+            <p class="hero-subtitle">> 1000+ GAMES LOADED</p>
+            <button class="btn-play" onclick="scrollToGrid()">START GAME</button>
         </div>
 
         <!-- CATEGORIES -->
         <div class="categories-wrapper">
             <div class="cat-pill cat-arcade active" onclick="filterCategory('all', this)">
-                <i class="fa-solid fa-layer-group"></i> All
+                <i class="fa-solid fa-globe"></i> ALL
             </div>
             <div class="cat-pill cat-arcade" onclick="filterCategory('arcade', this)">
-                <i class="fa-solid fa-ghost"></i> Arcade
+                <i class="fa-solid fa-ghost"></i> ARCADE
             </div>
             <div class="cat-pill cat-puzzle" onclick="filterCategory('puzzle', this)">
-                <i class="fa-solid fa-puzzle-piece"></i> Puzzle
+                <i class="fa-solid fa-puzzle-piece"></i> LOGIC
             </div>
             <div class="cat-pill cat-racing" onclick="filterCategory('racing', this)">
-                <i class="fa-solid fa-flag-checkered"></i> Racing
+                <i class="fa-solid fa-flag-checkered"></i> RACE
             </div>
             <div class="cat-pill cat-adventure" onclick="filterCategory('adventure', this)">
-                <i class="fa-solid fa-compass"></i> Adventure
+                <i class="fa-solid fa-dungeon"></i> RPG
             </div>
             <div class="cat-pill cat-multi" onclick="filterCategory('multiplayer', this)">
-                <i class="fa-solid fa-users"></i> Multiplayer
+                <i class="fa-solid fa-users"></i> VS
             </div>
         </div>
 
@@ -470,8 +595,8 @@
             <!-- JS Injectarà els jocs aquí -->
         </div>
         
-        <div id="noResults" style="text-align:center; padding: 40px; display:none; color: var(--text-muted);">
-            <h3>No s'han trobat jocs :(</h3>
+        <div id="noResults" style="text-align:center; padding: 40px; display:none; color: var(--text-dim); font-family: 'Press Start 2P';">
+            <h3>> ERROR 404: GAME NOT FOUND</h3>
         </div>
 
     </div>
@@ -480,7 +605,7 @@
     <div id="modalOverlay" class="modal-overlay">
         <div class="game-window">
             <div class="window-header">
-                <span id="windowTitle" style="font-weight:700;">Game Title</span>
+                <span id="windowTitle">GAME TITLE</span>
                 <div style="display:flex; gap:10px;">
                     <button class="btn-control" onclick="toggleFullScreen()"><i class="fa-solid fa-expand"></i></button>
                     <button class="btn-control btn-close" onclick="closeGame()"><i class="fa-solid fa-xmark"></i></button>
@@ -496,6 +621,7 @@
 
     /* DADES DELS JOCS (Les teves dades originals) */
     const gamesData = [
+        { name: "Combat Reload", url: "clcombatreload.html", image: "" },
         { name: "10 Minutes Till Dawn", url: "cl10minutestildawn.html", image: "" },
         { name: "10-103 Null Kevin", url: "clnullkevin.html", image: "" },
         { name: "12 Mini Battles", url: "cl12minibattles.html", image: "" },
@@ -1239,29 +1365,32 @@
     const gameIframe = document.getElementById('gameIframe');
     const windowTitle = document.getElementById('windowTitle');
     const loadingScreen = document.getElementById('loadingScreen');
-    const percentageDisplay = document.getElementById('percentageDisplay');
+    const progressBar = document.getElementById('progressBar');
+    const textPercent = document.getElementById('textPercent');
 
-    /* --- LOGICA DE CÀRREGA SIMULADA (Més ràpida) --- */
+    /* --- LOGICA DE CÀRREGA SIMULADA (Barra Retro) --- */
     function startLoading() {
         let percent = 0;
         const interval = setInterval(() => {
-            percent += Math.floor(Math.random() * 20);
+            percent += Math.floor(Math.random() * 15);
             if (percent > 100) percent = 100;
-            percentageDisplay.textContent = percent + '%';
+            
+            progressBar.style.width = percent + '%';
+            textPercent.textContent = percent + '%';
             
             if (percent === 100) {
                 clearInterval(interval);
                 setTimeout(() => {
                     loadingScreen.classList.add('hidden');
-                }, 500);
+                }, 800);
             }
-        }, 150);
+        }, 120);
     }
 
     /* --- LOGICA PRINCIPAL DE JOCS --- */
     function openGame(url, name) {
         const fullUrl = GAMES_FOLDER + url;
-        windowTitle.textContent = name;
+        windowTitle.textContent = name.toUpperCase();
         gameIframe.src = fullUrl;
         modal.classList.add('active');
         document.body.style.overflow = 'hidden';
@@ -1276,7 +1405,7 @@
     function toggleFullScreen() {
         if (!document.fullscreenElement) {
             gameIframe.requestFullscreen().catch(err => {
-                alert(`Error: ${err.message}`);
+                alert(`SYSTEM ERROR: ${err.message}`);
             });
         } else {
             document.exitFullscreen();
@@ -1299,11 +1428,11 @@
         }
 
         const keywords = {
-            'arcade': ['pacman', 'space', 'breakout', 'invader', 'retro', 'clicker', 'idle'],
-            'puzzle': ['2048', 'puzzle', 'chess', 'logic', 'tetris', 'word', 'sudoku', 'minesweeper'],
-            'racing': ['race', 'car', 'moto', 'bike', 'drift', 'speed', 'kart'],
-            'adventure': ['quest', 'rpg', 'dungeon', 'story', 'fnaf', 'survival', 'zelda'],
-            'multiplayer': ['io', 'multi', '2 player', 'vs', 'bros']
+            'arcade': ['pacman', 'space', 'breakout', 'invader', 'retro', 'clicker', 'idle', 'ball', 'jump'],
+            'puzzle': ['2048', 'puzzle', 'chess', 'logic', 'tetris', 'word', 'sudoku', 'minesweeper', 'quiz'],
+            'racing': ['race', 'car', 'moto', 'bike', 'drift', 'speed', 'kart', 'drive', 'run'],
+            'adventure': ['quest', 'rpg', 'dungeon', 'story', 'fnaf', 'survival', 'zelda', 'zombie', 'horror'],
+            'multiplayer': ['io', 'multi', '2 player', 'vs', 'bros', 'battle', 'fight']
         };
 
         const terms = keywords[category] || [];
@@ -1341,15 +1470,19 @@
                 // Imatge
                 let imgSrc = game.image && game.image.length > 0 ? game.image : IMAGES_FOLDER + game.url.replace('.html', '.jpg');
                 
-                // Badges aleatòries per semblar-se al disseny (visual candy)
+                // Badges aleatòries
                 let badgeHTML = '';
-                if (Math.random() > 0.8) badgeHTML = `<div class="card-badge badge-new">New</div>`;
-                else if (Math.random() > 0.9) badgeHTML = `<div class="card-badge badge-hot"><i class="fa-solid fa-fire"></i> Hot</div>`;
+                if (Math.random() > 0.8) badgeHTML = `<div class="card-badge badge-new">NEW</div>`;
+                else if (Math.random() > 0.9) badgeHTML = `<div class="card-badge badge-hot"><i class="fa-solid fa-fire"></i> HOT</div>`;
 
                 const imgContainer = document.createElement('div');
                 imgContainer.className = 'card-image-container';
+                
+                // Fallback image amb estètica retro si falla la càrrega
+                const fallbackImg = `https://placehold.co/400x300/111122/00ff41?text=NO+SIGNAL&font=monospace`;
+
                 imgContainer.innerHTML = `
-                    <img class="card-img" src="${imgSrc}" loading="lazy" onerror="this.src='https://placehold.co/400x300/e2e8f0/64748b?text=Game'">
+                    <img class="card-img" src="${imgSrc}" loading="lazy" onerror="this.src='${fallbackImg}'">
                     ${badgeHTML}
                 `;
 
@@ -1357,7 +1490,7 @@
                 content.className = 'card-content';
                 content.innerHTML = `
                     <div class="game-title">${game.name}</div>
-                    <div class="play-btn-overlay">Play Now</div>
+                    <div class="play-btn-overlay">INSERT COIN</div>
                 `;
 
                 card.appendChild(imgContainer);
